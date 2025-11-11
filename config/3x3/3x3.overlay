@@ -32,3 +32,8 @@ cat > config/3x3/3x3.keymap << 'EOF'
         };
     };
 };
+bluetooth {
+    profile0 {
+        name = "Marek 3x3";
+    };
+};
