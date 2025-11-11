@@ -21,27 +21,19 @@ cat > config/3x3/3x3.keymap << 'EOF'
 
 /
 {
+   #include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/
+{
     keymap {
         compatible = "zmk,keymap";
         default_layer {
             bindings = <
-                &kp N3   &kp D   &kp E
-                &kp N4   &kp F   &kp R
-                &kp N5   &kp G   &kp T
+                &kp N3      &kp D      &kp E
+                &kp N4      &kp F      &kp R
+                &bt_clr     &kp G      &kp T   // ← „5” = Reset BLE
             >;
-        };
-    };
-};
-/ {
-    chosen {
-        zmk,bluetooth {
-            profiles = <&profile0>;
-        };
-    };
-
-    bluetooth {
-        profile0: bluetooth-profile-0 {
-            name = "Marek 3x3";
         };
     };
 };
