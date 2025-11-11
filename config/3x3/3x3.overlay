@@ -25,9 +25,9 @@ cat > config/3x3/3x3.keymap << 'EOF'
         compatible = "zmk,keymap";
         default_layer {
             bindings = <
-                &kp A &kp B &kp C
-                &kp D &kp E &kp F
-                &kp G &kp H &kp I
+                &kp N3   &kp D   &kp E
+                &kp N4   &kp F   &kp R
+                &kp N5   &kp G   &kp T
             >;
         };
     };
