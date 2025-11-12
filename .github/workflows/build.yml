@@ -3,6 +3,10 @@ on: [push, pull_request, workflow_dispatch]
 name: Build
 
 jobs:
+env:
+  ACTIONS_CACHE_URL: "https://v1.cache.actions.githubusercontent.com"
+  ACTIONS_RUNTIME_TOKEN: "dummy"
+  ACTIONS_RUNTIME_URL: "https://actions-runtime.dummy.com"
   build:
     runs-on: ubuntu-latest
     container:
