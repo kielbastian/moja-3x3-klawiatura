@@ -37,3 +37,4 @@ cat > config/3x3/3x3.keymap << 'EOF'
         };
     };
 };
+CONFIG_SETTINGS_RESET=y
