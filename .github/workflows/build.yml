@@ -1,53 +1,25 @@
-on: [push, pull_request, workflow_dispatch]
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: Build
+name: Build ZMK firmware
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-env:
-  ACTIONS_CACHE_URL: "https://v1.cache.actions.githubusercontent.com"
-  ACTIONS_RUNTIME_TOKEN: "dummy"
-  ACTIONS_RUNTIME_URL: "https://actions-runtime.dummy.com"
   build:
-    runs-on: ubuntu-latest
-    container:
-      image: zmkfirmware/zmk-build-arm:2.5
-    name: Build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cache west modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-zephyr-modules
-        with:
-          path: |
-            modules/
-            tools/
-            zephyr/
-            bootloader/
-            zmk/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('manifest-dir/west.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: West Init
-        run: west init -l config
-      - name: West Update
-        run: west update
-      - name: West Zephyr export
-        run: west zephyr-export
-      - name: West Build (KEYBOARD_TITLE)
-        run: west build -s zmk/app -b BOARD_NAME -- -DSHIELD=SHIELD_NAME -DZMK_CONFIG="${GITHUB_WORKSPACE}/config"
-      - name: KEYBOARD_TITLE DTS File
-        if: ${{ always() }}
-        run: cat -n build/zephyr/BOARD_NAME.dts.pre.tmp
-      - name: KEYBOARD_TITLE Kconfig file
-        run: cat build/zephyr/.config | grep -v "^#" | grep -v "^$"
-      - name: Rename zmk.uf2
-        run: cp build/zephyr/zmk.uf2 SHIELD_NAME_BOARD_NAME.uf2
-      - name: Archive (KEYBOARD_TITLE)
-        uses: actions/upload-artifact@v2
-        with:
-          name: firmware
-          path: SHIELD_NAME_BOARD_NAME.uf2
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      # The list of boards to build for, separated by spaces.
+      board: nice_nano_v2
+      # The list of shields to build for, separated by spaces.
+      # The name of the shield should be the name of the DTS file in your boards/shields folder, without the .shield extension.
+      # For example, for a Kyria, you would use "kyria_left kyria_right".
+      # If you are building for a board that doesn't need a shield, you can leave this empty.
+      shield: # Add your shield name here. For a 3x3 macropad, it might be the name of your .conf file if you made it a shield.
+      # A list of extra arguments to pass to the build script, separated by spaces.
+      # For example, to enable a custom shield named "my_shield", you would use "-- -DSHIELD=my_shield".
+      # You can also use this to override settings in your config files.
+      # For example, to change the idle timeout to 15 minutes, you would use "-- -DZMK_IDLE_TIMEOUT=900000".
+      build-args:
