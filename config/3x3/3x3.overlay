@@ -32,7 +32,7 @@ cat > config/3x3/3x3.keymap << 'EOF'
             bindings = <
                 &kp N3      &kp D      &kp E
                 &kp N4      &kp F      &kp R
-                &out BT_SEL     &kp G      &kp T   // ← „5” = Reset BLE
+                &kp N11     &kp G      &kp P   
             >;
         };
     };
